@@ -1,3 +1,31 @@
+//タスク管理アプリにCategory（カテゴリ）を追加して、ListViewの画面でカテゴリによるTaskの絞り込みをさせるようにしてください。
+//
+//        下記の要件を満たしてください。
+//
+//        ●本レッスンで制作した TaskApp プロジェクトを基に制作してください
+//        ●TaskクラスにcategoryというStringプロパティを追加してください
+//        タスク作成画面でcategoryを入力できるようにしてください
+//        一覧画面に文字列検索用の入力欄を設置し、categoryと合致するTaskのみ絞込み表示させてください
+//        要件を満たすものであれば、どのようなものでも構いません。
+//        例えば、保存ボタンやキャンセルボタンを作ったりしてみてください。
+//
+//        ■ヒント
+//        以下のRealmのドキュメントを確認しましょう。
+//        検索条件を指定する | Realm
+//        注意
+//        categoryプロパティを追加したあとは、エミュレータのタスク管理アプリを削除してください（以前のデータである *.realm ファイルが残っているため）
+//
+//        ■発展課題
+//        以下は、チャレンジできる方はしてみましょう。
+//
+//        レッスン内の機能を全て満たしてください（AlarmManager機能などあるかも確認してください）
+//        上記のString型のcategoryを、クラスのCategoryへ変更してください
+//        追加で、タスク作成画面から遷移する画面を1つ作成してください
+//        その画面ではCategory（idとカテゴリ名を持つ）のクラスを作成できるようにしてください
+//        タスク作成画面でTaskを作成するときにCategoryを選択できるようにしてください
+//        一覧画面でCategoryを選択すると、Categoryに属しているタスクのみ表示されるようにしてください
+
+
 package jp.techacademy.kenta.imabayashi.taskapp;
 
 import android.app.AlarmManager;
@@ -25,7 +53,9 @@ import io.realm.Sort;
 public class MainActivity extends AppCompatActivity {
     public final static String EXTRA_TASK = "jp.techacademy.kenta.imabayashi.taskapp.TASK";
 
+
     private Realm mRealm;
+    //
     private RealmChangeListener mRealmListener = new RealmChangeListener() {
         @Override
         public void onChange(Object element) {
