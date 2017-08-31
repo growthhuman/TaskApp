@@ -4,8 +4,8 @@
 //
 //        ●本レッスンで制作した TaskApp プロジェクトを基に制作してください
 //        ●TaskクラスにcategoryというStringプロパティを追加してください
-//        タスク作成画面でcategoryを入力できるようにしてください
-//        一覧画面に文字列検索用の入力欄を設置し、categoryと合致するTaskのみ絞込み表示させてください
+//        ●タスク作成画面でcategoryを入力できるようにしてください
+//        ●一覧画面に文字列検索用の入力欄を設置し、categoryと合致するTaskのみ絞込み表示させてください
 //        要件を満たすものであれば、どのようなものでも構いません。
 //        例えば、保存ボタンやキャンセルボタンを作ったりしてみてください。
 //
@@ -37,8 +37,12 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Editable;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -64,6 +68,8 @@ public class MainActivity extends AppCompatActivity {
     };
     private ListView mListView;
     private TaskAdapter mTaskAdapter;
+
+    private EditText text;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -147,10 +153,36 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //検索ボタンの処理を追加する。
+        text = (EditText)findViewById(R.id.editText1);
+
+
+        Button button = (Button)findViewById(R.id.button1);
+        button.setOnClickListener(new View.OnClickListener(){
+            @Override
+            public void onClick(View v) {
+                    reloadListViewByCategory(text.getText());
+            }
+
+        });
+
+
         // アプリ起動時に表示テスト用のタスクを作成する
 //        addTaskForTest();
 
         reloadListView();
+    }
+
+    private void reloadListViewByCategory(Editable text) {
+        // Realmデータベースから、「全てのデータを取得して新しい日時順に並べた結果」を取得
+        RealmResults<Task> taskRealmResults = mRealm.where(Task.class).equalTo("category", String.valueOf(text)).findAll();
+        // 上記の結果を、TaskList としてセットする
+        mTaskAdapter.setTaskList(mRealm.copyFromRealm(taskRealmResults));
+        // TaskのListView用のアダプタに渡す
+        mListView.setAdapter(mTaskAdapter);
+        // 表示を更新するために、アダプターにデータが変更されたことを知らせる
+        mTaskAdapter.notifyDataSetChanged();
+        Log.d("Test", String.valueOf(text));
     }
 
     private void reloadListView() {
